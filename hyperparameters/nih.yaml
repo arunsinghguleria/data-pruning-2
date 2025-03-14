@@ -1,0 +1,45 @@
+nih:
+  train:
+    stage: 'train'
+    name: 'nih'
+    num_class: 20
+    path: "/data/home1/arunsg/gitproject/data-pruning-2/dataset/nih/nih_train.csv"
+    image_path: "/data/home1/arunsg/data-pruning/dataset/images/"
+
+    path_modified:  # path_modifed and image_path_modifed both should be present or absent (it will be used when use_augmented_data flag is True)
+    image_path_modified: 
+
+    cifar_sample:  # already LT dataset, keep it null
+    prune_sample : False # if True then provide prune_file 
+    prune_file: # none by default otherwise give filename from which based on the score samples will be pruned
+    cifar_prune_ratio: #[0.7, 0.3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    use_augmented_data: False # True or False if you want to use augment data set it to True,first pruning will happen (if doing) then on remaining samples augmentation will be done
+
+
+  test:
+    stage: 'test'
+    name: 'nih'
+    num_class: 20
+    path: "/data/home1/arunsg/gitproject/data-pruning-2/dataset/nih/nih_test.csv"
+    image_path: "/data/home1/arunsg/gitproject/data-pruning/cifar10_test_with_ids/"
+    path_modified: 
+    image_path_modified: 
+
+    cifar_sample: 
+    prune_file: 
+    cifar_prune_ratio: 
+    use_augmented_data: 
+
+num_epochs: 20
+batch_size: 8 
+class_count: 20
+get_scores: False # set True if you want to calculate Grand and EL2N score
+
+use_class_balanced_loss: False # set True if you want to use Class Balanced loss
+beta: 0.99 # will be used if use_class_balanced_loss is True
+
+use_weighted_loss: False # set True if you want to use weighted loss
+
+
+use_sampler: False # set True if you want to use weighted sampling
+results_folder: '/data/home1/arunsg/gitproject/data-pruning-2/results/nih_experiment_results/'

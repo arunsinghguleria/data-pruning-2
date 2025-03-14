@@ -1,0 +1,15 @@
+without any pruning only on LT dataset
+with random pruning 
+with GraNd pruning
+with GraNd pruning with data augmentationß
+
+with random pruning and data augmentation
+
+
+
+
+Experiment Series 5 - with cifar_EL2N_score_30
+
+Experiment Series 6 - with random pruning 
+
+    
