@@ -1,0 +1,5 @@
+dataset
+*.pyc
+_*.pyc
+CIFAR10
+wandb

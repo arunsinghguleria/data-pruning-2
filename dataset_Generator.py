@@ -56,8 +56,35 @@ class DataSetGenerator:
 
         # for i in self.d.keys():
             # print(f'{i} - {len(self.d[i])}')
+        if(params.stage == 'train' and params.get('common_prune')):
+            print('--------------------- common prune on some matric ---------------------')
 
-        if(params.stage == 'train' and params.prune_file):
+            remove_example = set(get_common_pruned_example_names_function_Full_dataset(params.prune_file,pathDatasetFile = params.path,pathImageDirectory = self.image_path ,prune_ratio = params.cifar_prune_ratio,ratio = params.common_prune_ratio))
+            for i in self.d.keys():
+                tmp = []
+                for sample in self.d[i]:
+                    if(sample['filename'][:-4] not in remove_example):
+                        tmp.append(sample)
+                self.d[i] = tmp
+                print(len(tmp))
+
+
+            print(len(remove_example),len(self.d[i]))
+            #print('--------------------- we are doing common prune ---------------------')
+        elif(params.stage == 'train' and params.get('common_prune_random')):
+            print('---------------------common random prune ---------------------')
+
+            remove_example = set(get_random_pruned_example_names_function_Full_dataset(params.prune_file,pathDatasetFile = params.path,pathImageDirectory = self.image_path ,prune_ratio = params.cifar_prune_ratio,ratio = params.common_prune_ratio))
+            for i in self.d.keys():
+                tmp = []
+                for sample in self.d[i]:
+                    if(sample['filename'][:-4] not in remove_example):
+                        tmp.append(sample)
+                self.d[i] = tmp
+                print(len(tmp))
+
+
+        elif(params.stage == 'train' and params.prune_file):
             print(f'using {params.prune_file} to prune dataset')
             remove_example = set(get_pruned_example_names_function(params.prune_file,pathDatasetFile = params.path,pathImageDirectory = self.image_path ,prune_ratio = params.cifar_prune_ratio))
 
@@ -125,8 +152,9 @@ class DataSetGenerator:
 
     def get_data(self,index):
         image,label =  self.__getitem__(index)
+        label = torch.nn.functional.one_hot(torch.tensor(label), num_classes=self.num_classes)
         path = self.dataset[index]['id']
-        return (image,torch.tensor(label),path)
+        return (image,label,path)
     
 
     
@@ -252,3 +280,144 @@ def get_pruned_example_names_function(pathPruneFile,pathDatasetFile,pathImageDir
 
     return pruned_image_names
 
+
+
+
+
+
+
+
+
+
+
+def get_common_pruned_example_names_function_Full_dataset(pathPruneFile,pathDatasetFile,pathImageDirectory,prune_ratio ,epoch_no = 6,ratio = 0.2):
+    '''
+        function will take GraNd score file or EL2N score file as input, and return the names of smaples which are to pruned in DatasetGenerter.
+    '''
+    # listImageLabels = defaultdict(list)
+    listImageLabels = []
+
+    dataset_dict = {}
+    
+    fileDescriptor = open(pathDatasetFile, "r")
+        
+    #---- get into the loop
+    line = True
+    line = fileDescriptor.readline()
+
+    
+    while line:
+                
+        line = fileDescriptor.readline()
+            
+            #--- if not empty
+        if line:
+          
+            lineItems = line.split(",")
+            # print(lineItems)
+            lineItems[-1] = int(lineItems[-1][:-1])
+            # imagePath = os.path.join(pathImageDirectory, lineItems[0])
+            imagePath = lineItems[0]
+            imageLabel = lineItems[-1]
+            # listImageLabels[imageLabel].append(imagePath)
+            dataset_dict[imagePath] = imageLabel
+    fileDescriptor.close()
+
+    
+    fileDescriptor = open(pathPruneFile, "r")
+        
+        #---- get into the loop
+    line = fileDescriptor.readline()
+
+    line = fileDescriptor.readline() # added to ignore the first line (column names)
+
+    cnt = 0
+        
+    while line:
+                
+        if line:
+          
+            lineItems = line.split(",")
+            lineItems[-1] = lineItems[-1][:-1]
+
+            img_name = [lineItems[0]]
+            
+            score = [ float(i) for i in lineItems[1:] ]
+            if(len(score)==0):
+                print(score)
+
+            # listImageLabels[dataset_dict[img_name[0]]].append(img_name+score)
+            listImageLabels.append(img_name+score)
+            
+        line = fileDescriptor.readline()
+    fileDescriptor.close()
+    '''
+    li = []
+    for k in listImageLabels.keys():
+        listImageLabels[k] = sorted(listImageLabels[k],key = lambda i: i[-1])
+        li.append([k,len(listImageLabels[k])])
+    
+    li = sorted(li,key = lambda i: i[1],reverse = True)
+    
+    for i in range(len(li)):
+        k = li[i][0]
+        cnt = li[i][1]
+        ratio = prune_ratio[i]
+    
+        listImageLabels[k] = listImageLabels[k][:int(ratio*cnt)]
+    '''
+    listImageLabels = sorted(listImageLabels,key = lambda i:i[-1])
+
+    listImageLabels = listImageLabels[:int(ratio*len(listImageLabels))]
+
+    
+    pruned_image_names = set()
+
+    # for k in listImageLabels.keys():
+    #     for image in listImageLabels[k]:
+    #         pruned_image_names.add(image[0])
+    for image in listImageLabels:
+        pruned_image_names.add(image[0])
+
+    return pruned_image_names
+
+
+
+
+def get_random_pruned_example_names_function_Full_dataset(pathPruneFile,pathDatasetFile,pathImageDirectory,prune_ratio ,epoch_no = 6,ratio = 0.2):
+    '''
+        function will take GraNd score file or EL2N score file as input, and return the names of smaples which are to pruned in DatasetGenerter.
+    '''
+    # listImageLabels = defaultdict(list)
+    listImageLabels = []
+
+    # dataset_dict = {}
+    
+    fileDescriptor = open(pathDatasetFile, "r")
+        
+    #---- get into the loop
+    line = True
+    line = fileDescriptor.readline()
+
+    
+    while line:
+                
+        line = fileDescriptor.readline()
+            
+            #--- if not empty
+        if line:
+          
+            lineItems = line.split(",")
+            # print(lineItems)
+            # lineItems[-1] = int(lineItems[-1][:-1])
+            # imagePath = os.path.join(pathImageDirectory, lineItems[0])
+            imagePath = lineItems[0]
+            # imageLabel = lineItems[-1]
+            # listImageLabels[imageLabel].append(imagePath)
+            # dataset_dict[imagePath] = imageLabel
+            listImageLabels.append(imagePath)
+    fileDescriptor.close()
+    random.shuffle(listImageLabels)
+    listImageLabels = listImageLabels[:int(ratio*len(listImageLabels))]
+    print(f'pruning randomly {len(listImageLabels)} for full dataset')
+    return listImageLabels

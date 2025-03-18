@@ -96,11 +96,11 @@ def train(args,config):
 
     transformations=transforms.Compose([transforms.ToTensor(),transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])])
 
-    trainset=torchvision.datasets.CIFAR10(root='./CIFAR10',download=True,transform=transformations,train=True)
-    testset=torchvision.datasets.CIFAR10(root='./CIFAR10',download=True,transform=transformations,train=False)
+    # trainset=torchvision.datasets.CIFAR10(root='./CIFAR10',download=True,transform=transformations,train=True)
+    # testset=torchvision.datasets.CIFAR10(root='./CIFAR10',download=True,transform=transformations,train=False)
 
-    trainloader=DataLoader(dataset=trainset,batch_size=64)
-    testloader=DataLoader(dataset=testset,batch_size=64)
+    # trainloader=DataLoader(dataset=trainset,batch_size=64)
+    # testloader=DataLoader(dataset=testset,batch_size=64)
 
 
     if(config.use_weighted_loss):

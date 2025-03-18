@@ -44,4 +44,4 @@ use_weighted_loss: False # set True if you want to use weighted loss
 
 use_sampler: False # set True if you want to use weighted sampling
 
-results_folder: '/data/home1/arunsg/gitproject/data-pruning-2/results/cifar_experiment_results/'
+results_folder: '/data/home1/arunsg/gitproject/data-pruning-3/data-pruning-3/results/cifar_experiment_results2/'

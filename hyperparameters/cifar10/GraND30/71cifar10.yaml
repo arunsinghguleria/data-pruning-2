@@ -10,7 +10,7 @@ cifar10:
 
     cifar_sample: [5000, 5000, 5000, 1825, 1812, 1803, 1787, 1773, 501, 499] # no of sample to keep to make it LT dataset
     prune_sample : True # if True then provide prune_file 
-    prune_file: /data/home1/arunsg/gitproject/data-pruning-2/Scores/CIFAR10-LT/GraNd_score_30.csv # none by default otherwise give filename from which based on the score samples will be pruned
+    prune_file: '/data/home1/arunsg/gitproject/data-pruning-3/data-pruning-3/Scores/CIFAR10-LT/GraNd_score_30.csv' # none by default otherwise give filename from which based on the score samples will be pruned
     cifar_prune_ratio: [0.1, 0.1, 0.1, 0, 0, 0, 0, 0, 0, 0]
     use_augmented_data: False # True or False if you want to use augment data set it to True,first pruning will happen (if doing) then on remaining samples augmentation will be done
 
@@ -43,4 +43,4 @@ use_weighted_loss: False # set True if you want to use weighted loss
 
 use_sampler: False # set True if you want to use weighted sampling
 
-results_folder: '/data/home1/arunsg/gitproject/data-pruning-2/results/cifar_experiment_results/'
+results_folder: '/data/home1/arunsg/gitproject/data-pruning-3/data-pruning-3/results/cifar_experiment_results2/LT/'

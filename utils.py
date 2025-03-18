@@ -253,7 +253,7 @@ def get_scores(model,train_data,optimizer,criterion,device,df_EL2N_score,df_GraN
     model.eval()
     # for batch_no, (images, labels) in enumerate(tqdm(nih_dataLoaderTrain_batch_1)):
     for i in tqdm(range(train_data.n),ncols=50):
-        images,labels, image_path = train_data.get_data(i)
+        images,labels, image_path = train_data.get_data(i) # one hot vector is required for EL2N score
         images = images.unsqueeze(0)
         labels = labels.unsqueeze(0)
         images = images.to(device)
@@ -262,7 +262,8 @@ def get_scores(model,train_data,optimizer,criterion,device,df_EL2N_score,df_GraN
         optimizer.zero_grad()
             
         outputs = model(images)
-        loss = criterion(outputs, labels)   
+        true_label = torch.argmax(labels,dim=1)
+        loss = criterion(outputs, true_label)   
         loss.backward()
 
 

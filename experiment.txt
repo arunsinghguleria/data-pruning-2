@@ -12,4 +12,6 @@ Experiment Series 5 - with cifar_EL2N_score_30
 
 Experiment Series 6 - with random pruning 
 
-    
+
+
+full cifar10 pruning - python3 trainer.py --exp_name cifar-full-20percent --dataset cifar10 --config hyperparameters/cifar10/0cifar10-full.yaml --device cuda:2

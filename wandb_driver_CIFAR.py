@@ -10,11 +10,12 @@ import pandas as pd
 
 
 def run_wandb(args):
-    df = pd.read_csv(f'/data/home1/arunsg/gitproject/data-pruning-2/results/cifar_experiment_results/{args.file_name}.csv')
+    df = pd.read_csv(f'/data/home1/arunsg/gitproject/data-pruning-3/data-pruning-3/results/cifar_experiment_results/{args.file_name}.csv')
 
     # wandb.init(project="pruning_CIFAR", group="tmp_group", config={'model':df.iloc[0]['prune_ratio']}, reinit=True)
     # wandb.init(project=f'pruning_CIFAR_{df.iloc[0]['sample']}', group="tmp_group", reinit=True)
-    wandb.init(project=f'CIFAR10-LT-5', group="tmp_group", reinit=True)
+    # wandb.init(project=f'CIFAR10-LT-5', group="tmp_group", reinit=True)
+    wandb.init(project=f'CIFAR10-Full', group="tmp_group", reinit=True)
 
 
     # dropout_str = "" if not args.dropout else "-dropout"
